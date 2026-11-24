@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { centroid } from '../../utils/geometry.js';
 import { fmt } from '../../utils/format.js';
+import { C, MONO } from '../../styles/theme.js';
 
 const BASE = { minX: 0, maxX: 20, minY: 0, maxY: 14 };
 const PAD = 1.2; // world units of padding around the drawing area
@@ -128,60 +129,50 @@ export default function PolygonCanvas({ points, snap, areaLabel, onAdd, onMove, 
       role="application"
       aria-label="Coordinate grid. Click to add a vertex, drag a vertex to move it, double-click a vertex to delete it."
     >
-      <defs>
-        <linearGradient id="polyFill" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor="#3cf5c0" stopOpacity="0.32" />
-          <stop offset="1" stopColor="#22d3ee" stopOpacity="0.12" />
-        </linearGradient>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation={r * 0.8} result="b" />
-          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
 
       {/* grid */}
       {lines.map((l) => (
-        <line key={l.k} x1={l.x1} x2={l.x2} y1={l.y1} y2={l.y2} stroke={l.axis ? 'rgba(180,200,230,.45)' : 'rgba(120,200,255,.09)'} strokeWidth={l.axis ? 2 : 1} />
+        <line key={l.k} x1={l.x1} x2={l.x2} y1={l.y1} y2={l.y2} stroke={l.axis ? C.ink : C.grid} strokeWidth={l.axis ? 3 : 1} />
       ))}
       {lines.map((l) => (l.v ? (
-        <text key={`t${l.k}`} x={l.x1 + 4} y={sy(b.minY - PAD) - 6} fontSize={fontSize} fill="#5f7290" fontFamily="JetBrains Mono">{fmt(l.label, 2)}</text>
+        <text key={`t${l.k}`} x={l.x1 + 4} y={sy(b.minY - PAD) - 6} fontSize={fontSize} fill={C.muted} fontFamily={MONO}>{fmt(l.label, 2)}</text>
       ) : (
-        <text key={`t${l.k}`} x={vb.x + 6} y={l.y1 - 4} fontSize={fontSize} fill="#5f7290" fontFamily="JetBrains Mono">{fmt(l.label, 2)}</text>
+        <text key={`t${l.k}`} x={vb.x + 6} y={l.y1 - 4} fontSize={fontSize} fill={C.muted} fontFamily={MONO}>{fmt(l.label, 2)}</text>
       )))}
 
       {/* polygon fill — fades in again each time a vertex is added */}
       {n >= 3 && (
-        <motion.path key={`fill-${n}`} d={d} fill="url(#polyFill)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} />
+        <motion.path key={`fill-${n}`} d={d} fill={C.mint} fillOpacity={0.75} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6 }} />
       )}
       {n >= 2 && (
-        <path d={d} fill="none" stroke="#3cf5c0" strokeWidth={r * 0.42} strokeLinejoin="round" filter="url(#glow)" />
+        <path d={d} fill="none" stroke={C.ink} strokeWidth={r * 0.5} strokeLinejoin="round" />
       )}
       {/* the most recent edge is drawn with an animation */}
       {last && (
         <motion.line
           key={`edge-${n}`}
           x1={sx(last[0].x)} y1={sy(last[0].y)} x2={sx(last[1].x)} y2={sy(last[1].y)}
-          stroke="#fff" strokeWidth={r * 0.42} strokeLinecap="round"
+          stroke={C.yellow} strokeWidth={r * 0.5} strokeLinecap="round"
           initial={{ pathLength: 0, opacity: 1 }} animate={{ pathLength: 1, opacity: 0 }} transition={{ duration: 0.7 }}
         />
       )}
       {/* closing edge hint */}
       {n >= 3 && (
-        <line x1={sx(points[n - 1].x)} y1={sy(points[n - 1].y)} x2={sx(points[0].x)} y2={sy(points[0].y)} stroke="#22d3ee" strokeWidth={r * 0.25} strokeDasharray={`${r} ${r * 0.7}`} opacity="0.9" />
+        <line x1={sx(points[n - 1].x)} y1={sy(points[n - 1].y)} x2={sx(points[0].x)} y2={sy(points[0].y)} stroke={C.ink} strokeWidth={r * 0.5} strokeDasharray={`${r} ${r * 0.6}`} />
       )}
 
       {/* area label at centroid */}
       {c && (
-        <text x={sx(c.x)} y={sy(c.y)} textAnchor="middle" dominantBaseline="middle" fontSize={fontSize * 1.1} fill="rgba(232,241,255,.7)" fontWeight="600" fontFamily="JetBrains Mono" pointerEvents="none">
+        <text x={sx(c.x)} y={sy(c.y)} textAnchor="middle" dominantBaseline="middle" fontSize={fontSize * 1.1} fill={C.ink} fontWeight="700" fontFamily={MONO} pointerEvents="none" paintOrder="stroke" stroke={C.white} strokeWidth={fontSize * 0.25}>
           {areaLabel}
         </text>
       )}
 
       {/* hover crosshair (mouse only) */}
       {hover && !drag.current && (
-        <g pointerEvents="none" opacity="0.7">
-          <circle cx={sx(hover.x)} cy={sy(hover.y)} r={r * 0.55} fill="none" stroke="#22d3ee" strokeDasharray="3 3" />
-          <text x={sx(hover.x) + r} y={sy(hover.y) - r} fontSize={fontSize} fill="#22d3ee" fontFamily="JetBrains Mono">({fmt(hover.x)}, {fmt(hover.y)})</text>
+        <g pointerEvents="none" opacity="0.8">
+          <circle cx={sx(hover.x)} cy={sy(hover.y)} r={r * 0.55} fill="none" stroke={C.ink} strokeWidth={r * 0.2} strokeDasharray="4 3" />
+          <text x={sx(hover.x) + r} y={sy(hover.y) - r} fontSize={fontSize} fill={C.ink} fontWeight="700" fontFamily={MONO}>({fmt(hover.x)}, {fmt(hover.y)})</text>
         </g>
       )}
 
@@ -191,7 +182,7 @@ export default function PolygonCanvas({ points, snap, areaLabel, onAdd, onMove, 
           <motion.circle
             cx={sx(p.x)} cy={sy(p.y)} r={r}
             initial={i === n - 1 ? { scale: 0 } : false} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 500, damping: 22 }}
-            fill={selected === i ? '#3cf5c0' : '#04070f'} stroke={i === 0 ? '#22d3ee' : '#3cf5c0'} strokeWidth={r * 0.35}
+            fill={selected === i ? C.yellow : i === 0 ? C.pink : C.white} stroke={C.ink} strokeWidth={r * 0.4}
             style={{ cursor: 'grab', transformBox: 'fill-box', transformOrigin: 'center' }}
             onPointerDown={(e) => handleVertexDown(e, i)}
             onDoubleClick={(e) => { e.stopPropagation(); onRemove(i); }}
@@ -202,7 +193,7 @@ export default function PolygonCanvas({ points, snap, areaLabel, onAdd, onMove, 
             onPointerDown={(e) => handleVertexDown(e, i)}
             onDoubleClick={(e) => { e.stopPropagation(); onRemove(i); }}
             onContextMenu={(e) => { e.preventDefault(); e.stopPropagation(); onRemove(i); }} />
-          <text x={sx(p.x) + r * 1.3} y={sy(p.y) - r * 1.3} fontSize={fontSize} fill={selected === i ? '#3cf5c0' : '#b4c3dc'} fontFamily="JetBrains Mono" pointerEvents="none">
+          <text x={sx(p.x) + r * 1.3} y={sy(p.y) - r * 1.3} fontSize={fontSize} fill={C.ink} fontWeight="700" fontFamily={MONO} paintOrder="stroke" stroke={C.white} strokeWidth={fontSize * 0.25} pointerEvents="none">
             P{i + 1}{selected === i ? ` (${fmt(p.x)}, ${fmt(p.y)})` : ''}
           </text>
         </g>

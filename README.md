@@ -1,6 +1,6 @@
 # AREA OPTIMISER — Exploring Maximum Area Through Mathematics
 
-Interactive Class 12 Mathematics exhibition website (CBSE · *Applications of Derivatives — Maxima and Minima*).
+Interactive Class 12 Mathematics exhibition website (CBSE · *Applications of Derivatives — Maxima and Minima*), styled in a neubrutalist design (flat colours, thick ink borders, hard shadows). Colours live in `src/styles/global.css` (`:root`) and `src/styles/theme.js` (SVG/chart colours).
 Built with **React + Vite + CSS**, **Framer Motion**, **Recharts**, **KaTeX** and **Lucide** icons.
 No backend, no paid APIs, works fully **offline** once built (fonts and KaTeX are bundled locally).
 

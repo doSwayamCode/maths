@@ -112,9 +112,9 @@ export default function DimensionCalculator() {
                   <div className="card-title"><Square size={18} /> Condition 1 — the perimeter is fixed</div>
                   <p className="card-sub">Constraint: <Tex>{'2(L+B)=P'}</Tex> stays the same, so <Tex>L</Tex> and <Tex>B</Tex> are linked. This is the derivative problem from the lab.</p>
                   <div className="grid grid-3" style={{ gap: 12, margin: '16px 0' }}>
-                    <Stat label="Max area (square)" value={fp.Amax} unit={u2} decimals={3} color="var(--cyan)" />
+                    <Stat label="Max area (square)" value={fp.Amax} unit={u2} decimals={3} color="var(--blue-ink)" />
                     <Stat label="% of maximum" value={fp.percent} unit="%" decimals={2} highlight={fp.isSquare} />
-                    <Stat label="Area lost" value={fp.shortfall} unit={u2} decimals={3} color={fp.isSquare ? 'var(--mint)' : 'var(--amber)'} />
+                    <Stat label="Area lost" value={fp.shortfall} unit={u2} decimals={3} color={fp.isSquare ? 'var(--mint-ink)' : 'var(--orange-ink)'} />
                   </div>
                   <CompareBars a={fp.A} b={fp.Amax} labelA={`Your ${fmt(result.L)} × ${fmt(result.B)} rectangle`} labelB={`Square ${fmt(fp.side, 3)} × ${fmt(fp.side, 3)} (same perimeter)`} u2={u2} />
                   <div className="eq-block" style={{ marginTop: 14 }}>
@@ -131,9 +131,9 @@ export default function DimensionCalculator() {
                   <div className="card-title"><Scale size={18} /> Condition 2 — length and breadth have separate limits</div>
                   <p className="card-sub">Constraint: <Tex>{'0<L\\le L_{\\max}'}</Tex> and <Tex>{'0<B\\le B_{\\max}'}</Tex>, chosen <b>independently</b>. The perimeter is <b>not</b> fixed here.</p>
                   <div className="grid grid-3" style={{ gap: 12, margin: '16px 0' }}>
-                    <Stat label="Max area" value={il.Amax} unit={u2} decimals={3} color="var(--cyan)" />
+                    <Stat label="Max area" value={il.Amax} unit={u2} decimals={3} color="var(--blue-ink)" />
                     <Stat label="% of maximum" value={il.percent} unit="%" decimals={2} highlight={il.percent >= 99.9999} />
-                    <Stat label="Area unused" value={il.shortfall} unit={u2} decimals={3} color={il.shortfall < 1e-9 ? 'var(--mint)' : 'var(--amber)'} />
+                    <Stat label="Area unused" value={il.shortfall} unit={u2} decimals={3} color={il.shortfall < 1e-9 ? 'var(--mint-ink)' : 'var(--orange-ink)'} />
                   </div>
                   <CompareBars a={il.A} b={il.Amax} labelA={`Your ${fmt(result.L)} × ${fmt(result.B)} rectangle`} labelB={`Largest allowed ${fmt(result.Lmax)} × ${fmt(result.Bmax)}`} u2={u2} />
                   <div className="eq-block cyan" style={{ marginTop: 14 }}>
@@ -164,11 +164,11 @@ function CompareBars({ a, b, labelA, labelB, u2 }) {
     <div className="stack" style={{ gap: 10 }}>
       <div className="bench-row">
         <div className="row" style={{ justifyContent: 'space-between', fontSize: 13.5 }}><span>{labelA}</span><span className="mono">{fmt(a, 3)} {u2}</span></div>
-        <div className="bar"><motion.div style={{ background: 'var(--grad)' }} initial={{ width: 0 }} animate={{ width: `${pa}%` }} transition={{ duration: 0.8 }} /></div>
+        <div className="bar"><motion.div style={{ background: 'var(--mint)' }} initial={{ width: 0 }} animate={{ width: `${pa}%` }} transition={{ duration: 0.8 }} /></div>
       </div>
       <div className="bench-row">
         <div className="row" style={{ justifyContent: 'space-between', fontSize: 13.5 }}><span>{labelB}</span><span className="mono">{fmt(b, 3)} {u2}</span></div>
-        <div className="bar"><motion.div style={{ background: 'var(--cyan)' }} initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 0.8 }} /></div>
+        <div className="bar"><motion.div style={{ background: 'var(--blue)' }} initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 0.8 }} /></div>
       </div>
     </div>
   );

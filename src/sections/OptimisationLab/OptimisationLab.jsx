@@ -114,11 +114,11 @@ export default function OptimisationLab() {
         {/* ---------- live results ---------- */}
         <div className="grid grid-4 lab-stats" style={{ marginTop: 20 }}>
           <Stat label="Current area A" value={shown.A} unit={`${unit}²`} decimals={3} highlight={isMax} />
-          <Stat label="Maximum area" value={shown.Amax} unit={`${unit}²`} decimals={3} color="var(--cyan)" />
-          <Stat label="Max − current" value={shown.difference} unit={`${unit}²`} decimals={3} color={isMax ? 'var(--mint)' : 'var(--amber)'} />
+          <Stat label="Maximum area" value={shown.Amax} unit={`${unit}²`} decimals={3} color="var(--blue-ink)" />
+          <Stat label="Max − current" value={shown.difference} unit={`${unit}²`} decimals={3} color={isMax ? 'var(--mint-ink)' : 'var(--orange-ink)'} />
           <Stat label="% of maximum">
             <span className={isMax ? 'mint' : ''}><AnimatedNumber value={shown.percent} decimals={2} suffix="%" /></span>
-            <div className="bar" style={{ marginTop: 8 }}><div style={{ width: `${shown.percent}%`, background: isMax ? 'var(--mint)' : 'var(--grad)' }} /></div>
+            <div className="bar" style={{ marginTop: 8 }}><div style={{ width: `${shown.percent}%`, background: isMax ? 'var(--mint)' : 'var(--yellow)' }} /></div>
           </Stat>
         </div>
 

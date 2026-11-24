@@ -206,7 +206,7 @@ export default function ShapeCalculator() {
               {n >= 3 && !crossing ? (
                 <div className="bench">
                   <BenchRow label="Your shape" value={area} max={circArea} u2={u2} color="var(--mint)" />
-                  <BenchRow label={`Regular ${n}-gon`} value={regArea} max={circArea} u2={u2} color="var(--cyan)" />
+                  <BenchRow label={`Regular ${n}-gon`} value={regArea} max={circArea} u2={u2} color="var(--blue)" />
                   <BenchRow label="Circle" value={circArea} max={circArea} u2={u2} color="var(--violet)" />
                   <p className="hint" style={{ marginTop: 8 }}>
                     Among all <Tex>{'n'}</Tex>-gons with perimeter <Tex>{'P'}</Tex>, the regular one is largest: <Tex>{'A=\\frac{P^2}{4n\\tan(\\pi/n)}'}</Tex>. No closed curve beats the circle, <Tex>{'A=\\frac{P^2}{4\\pi}'}</Tex> (isoperimetric inequality). Your shape uses <b className="mint">{fmt((area / circArea) * 100, 1)}%</b> of the circle&apos;s area.

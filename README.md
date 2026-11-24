@@ -18,12 +18,27 @@ npm run preview      # serve the production build → http://localhost:4173
 
 **For the exhibition laptop:** run `npm run build` once, then `npm run preview` — no internet needed.
 
+## Deploying on Netlify
+
+Everything is configured in `netlify.toml` (build command, `dist` folder, Node 20, caching), so no dashboard settings are needed.
+
+**Option A — from GitHub (auto-deploys on every push):**
+1. Netlify → *Add new site* → *Import an existing project* → GitHub → choose this repository and branch.
+2. Leave the build settings as Netlify detects them (`npm test && npm run build`, publish `dist`) → *Deploy*.
+
+**Option B — drag and drop (no GitHub needed):**
+1. Run `npm install` then `npm run build` on your computer.
+2. Go to https://app.netlify.com/drop and drag the **`dist`** folder onto the page.
+
+If any maths test fails, the Netlify build stops and the live site keeps the last working version.
+
 ## Project structure
 
 ```
 ├── index.html
 ├── package.json
 ├── vite.config.js
+├── netlify.toml                     # Netlify build & hosting settings
 ├── public/favicon.svg
 ├── tests/math.test.js               # unit tests for every formula
 └── src/

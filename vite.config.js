@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// base: './' keeps the build working when opened from any folder or sub-path
-// (handy for offline use on an exhibition laptop via `npm run preview`).
+// base: '/' — assets load from the site root, as Netlify serves it.
+// (Also works offline with `npm run preview` on the exhibition laptop.)
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/',
   build: {
     rollupOptions: {
       output: {

@@ -1,0 +1,30 @@
+# Netlify configuration for AREA OPTIMISER
+# Netlify reads this file automatically — no settings needed in the dashboard.
+
+[build]
+  # Run the maths tests first: if any formula breaks, the deploy is stopped
+  # and the live site keeps the last working version.
+  command = "npm test && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-page site: any unknown URL shows the home page instead of a 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Hashed JS/CSS/font files never change, so browsers can cache them forever.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"

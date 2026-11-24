@@ -33,7 +33,7 @@ function computeBounds(points) {
  *  - double-click / right-click a vertex → delete it
  * World coordinates are mathematical (y up); the SVG flips them.
  */
-export default function PolygonCanvas({ points, snap, areaLabel, onAdd, onMove, onDragEnd, onRemove, selected, onSelect }) {
+export default function PolygonCanvas({ points, snap, areaLabel, plot, plotLabel, onAdd, onMove, onDragEnd, onRemove, selected, onSelect }) {
   const svgRef = useRef(null);
   const drag = useRef(null); // { index, before }
   const down = useRef(null); // pointer-down position for click detection
@@ -161,10 +161,25 @@ export default function PolygonCanvas({ points, snap, areaLabel, onAdd, onMove, 
         <line x1={sx(points[n - 1].x)} y1={sy(points[n - 1].y)} x2={sx(points[0].x)} y2={sy(points[0].y)} stroke={C.ink} strokeWidth={r * 0.5} strokeDasharray={`${r} ${r * 0.6}`} />
       )}
 
+      {/* largest rectangular plot found inside the field */}
+      {plot && (
+        <motion.g key={plot.corners.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ')} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.35 }} pointerEvents="none">
+          <polygon
+            points={plot.corners.map((p) => `${sx(p.x)},${sy(p.y)}`).join(' ')}
+            fill={C.yellow} fillOpacity={0.85} stroke={C.ink} strokeWidth={r * 0.35} strokeDasharray={`${r * 0.9} ${r * 0.5}`}
+          />
+        </motion.g>
+      )}
+
       {/* area label at centroid */}
       {c && (
         <text x={sx(c.x)} y={sy(c.y)} textAnchor="middle" dominantBaseline="middle" fontSize={fontSize * 1.1} fill={C.ink} fontWeight="700" fontFamily={MONO} pointerEvents="none" paintOrder="stroke" stroke={C.white} strokeWidth={fontSize * 0.25}>
           {areaLabel}
+        </text>
+      )}
+      {c && plot && (
+        <text x={sx(c.x)} y={sy(c.y) + fontSize * 1.6} textAnchor="middle" dominantBaseline="middle" fontSize={fontSize} fill={C.ink} fontWeight="600" fontFamily={MONO} pointerEvents="none" paintOrder="stroke" stroke={C.white} strokeWidth={fontSize * 0.25}>
+          plot {plotLabel}
         </text>
       )}
 

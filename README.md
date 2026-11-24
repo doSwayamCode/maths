@@ -11,7 +11,7 @@ Requires **Node.js 18+** (check with `node -v`).
 ```bash
 npm install          # install dependencies (needs internet once)
 npm run dev          # development server → open the URL shown (usually http://localhost:5173)
-npm test             # run the 21 mathematics unit tests (Vitest)
+npm test             # run the 30 mathematics unit tests (Vitest)
 npm run build        # production build into dist/
 npm run preview      # serve the production build → http://localhost:4173
 ```
@@ -49,6 +49,7 @@ If any maths test fails, the Netlify build stops and the live site keeps the las
     │   └── sections.css             # section-specific layout & responsive rules
     ├── utils/
     │   ├── geometry.js              # Shoelace formula, orientation, perimeter, self-intersection, parsing
+    │   ├── inscribed.js             # largest rectangular plot inside a random-shaped field
     │   ├── optimisation.js          # A(L), A'(L), A''(L), P²/16, calculator conditions, validation
     │   └── format.js                # number formatting
     ├── hooks/useHistory.js          # undo / redo state
@@ -75,12 +76,25 @@ If any maths test fails, the Netlify build stops and the live site keeps the las
         └── About.jsx
 ```
 
+## The idea
+
+We usually see fields drawn as rectangles or squares: area is L × B, and with a fixed fence the best shape is a
+square (calculus). Real fields have **random shapes** that cannot be measured that way. This model:
+1. finds the **exact area** of any random-shaped field from its corner coordinates (Shoelace Formula), and
+2. finds the **largest rectangular plot** that fits inside it (numerical optimisation), and
+3. shows the calculus behind optimisation (fixed perimeter → square, A_max = P²/16; rectangle in a circle → square, A_max = 2r²).
+
 ## The mathematics
 
 **Mode 1 — Shoelace Formula** (area of the shape you draw, not its maximum):
 A = ½ |Σ (xᵢ yᵢ₊₁ − xᵢ₊₁ yᵢ)|. The absolute value makes the result identical for clockwise and anticlockwise order.
 The site also warns about self-intersecting or collinear vertices, and compares the shape against the regular n-gon
 and circle having the same perimeter (the true “how big could it be” benchmarks).
+
+**Largest plot inside a random field** (`src/utils/inscribed.js`): rotate the field through 0°–90°, lay a fine grid,
+find the biggest block of fully-inside cells, check it exactly against the boundary, then push each side outward
+until it touches the boundary. Verified against known answers: square → whole field, right triangle → half its
+area, circle → 2r² (the calculus answer), L-shape → 8 of 12.
 
 **Mode 2 — Fixed perimeter P:** B = P/2 − L, A(L) = L(P/2 − L), A′(L) = P/2 − 2L, A′ = 0 ⇒ L = B = P/4,
 A″(L) = −2 < 0 ⇒ maximum, A_max = P²/16.

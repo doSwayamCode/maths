@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   AlertTriangle, Circle, ClipboardList, Eraser, Hexagon, Info, Keyboard, MousePointerClick, Plus, Redo2,
-  RotateCcw, Trash2, Undo2, Shapes,
+  RotateCcw, Trash2, Undo2, Shapes, Tractor, Loader2,
 } from 'lucide-react';
 import SectionHeader from '../../components/SectionHeader.jsx';
 import Reveal from '../../components/Reveal.jsx';
@@ -15,14 +15,15 @@ import {
   perimeter, regularPolygonArea, round, shoelaceArea, shoelaceTerms, signedArea,
 } from '../../utils/geometry.js';
 import { fmt, tex } from '../../utils/format.js';
+import { largestInscribedRectangle } from '../../utils/inscribed.js';
 
 const PRESETS = {
-  'Irregular plot': [{ x: 2, y: 2 }, { x: 9, y: 1 }, { x: 16, y: 3 }, { x: 18, y: 9 }, { x: 12, y: 12 }, { x: 7, y: 10 }, { x: 3, y: 7 }],
+  'Random field': [{ x: 2, y: 2 }, { x: 9, y: 1 }, { x: 16, y: 3 }, { x: 18, y: 9 }, { x: 12, y: 12 }, { x: 7, y: 10 }, { x: 3, y: 7 }],
   'L-shape': [{ x: 3, y: 2 }, { x: 15, y: 2 }, { x: 15, y: 6 }, { x: 8, y: 6 }, { x: 8, y: 12 }, { x: 3, y: 12 }],
   Triangle: [{ x: 3, y: 2 }, { x: 17, y: 3 }, { x: 8, y: 12 }],
   'Square 8×8': [{ x: 6, y: 3 }, { x: 14, y: 3 }, { x: 14, y: 11 }, { x: 6, y: 11 }],
 };
-const DEFAULT_SHAPE = PRESETS['Irregular plot'];
+const DEFAULT_SHAPE = PRESETS['Random field'];
 const UNITS = ['units', 'm', 'cm', 'ft'];
 
 export default function ShapeCalculator() {
@@ -36,6 +37,10 @@ export default function ShapeCalculator() {
   const [bulk, setBulk] = useState('');
   const [bulkErr, setBulkErr] = useState(null);
   const [showWorking, setShowWorking] = useState(true);
+  const [allowRotation, setAllowRotation] = useState(true);
+  const [showPlot, setShowPlot] = useState(true);
+  const [plot, setPlot] = useState(null);
+  const [searching, setSearching] = useState(false);
 
   const n = points.length;
   const area = shoelaceArea(points);
@@ -49,6 +54,19 @@ export default function ShapeCalculator() {
   const regArea = n >= 3 ? regularPolygonArea(per, n) : 0;
   const circArea = n >= 3 ? circleAreaForPerimeter(per) : 0;
   const u2 = unit === 'units' ? 'sq. units' : `${unit}²`;
+  const lu = unit === 'units' ? 'units' : unit;
+  const canSearch = n >= 3 && !crossing && Math.abs(signed) > 1e-9;
+
+  // Largest rectangular plot inside the field — recomputed shortly after the shape stops changing.
+  useEffect(() => {
+    if (!canSearch) { setPlot(null); setSearching(false); return undefined; }
+    setSearching(true);
+    const id = setTimeout(() => {
+      setPlot(largestInscribedRectangle(points, { allowRotation }));
+      setSearching(false);
+    }, 220);
+    return () => clearTimeout(id);
+  }, [points, allowRotation, canSearch]);
 
   /* ----- actions ----- */
   const addPoint = useCallback((p) => { h.set((pts) => [...pts, p]); setSelected(null); }, [h]);
@@ -97,17 +115,18 @@ export default function ShapeCalculator() {
   return (
     <section className="section" id="shape">
       <div className="container">
-        <SectionHeader eyebrow="02 · Mode 1 · Irregular Shape Area Calculator" icon={Shapes} title={<>Measure any shape with the <span className="grad-text">Shoelace Formula</span></>}>
-          Click on the grid to place the corners of a region. Drag corners to reshape it. The area is recalculated
-          instantly from the coordinates — exactly how surveyors measure irregular plots of land.
+        <SectionHeader eyebrow="02 · Mode 1 · The Random-Shaped Field" icon={Shapes} title={<>A field that is <span className="grad-text">not a rectangle</span></>}>
+          Mark the corners of any random-shaped field on the grid (or type their coordinates). The model finds
+          two things a measuring tape cannot: the field&apos;s exact area, using the Shoelace Formula, and the
+          largest rectangular plot that can be used inside it, by numerical optimisation.
         </SectionHeader>
 
         <Reveal className="note info" style={{ marginBottom: 20 }}>
           <Info size={18} />
           <span>
-            <strong>This mode calculates the area of the shape you draw — not its maximum possible area.</strong>{' '}
-            A fixed boundary encloses one fixed area. "Maximum area" is an optimisation question that needs a
-            constraint (see the Optimisation Lab below).
+            <strong>A random field has one fixed area — its boundary decides it.</strong>{' '}
+            So "maximum area" here means something specific: the <strong>biggest rectangle</strong> (for crops,
+            a building or a shed) that fits completely inside the boundary.
           </span>
         </Reveal>
 
@@ -142,6 +161,8 @@ export default function ShapeCalculator() {
                 onMove={movePoint}
                 onDragEnd={h.commit}
                 onRemove={removePoint}
+                plot={showPlot && plot && !searching ? plot : null}
+                plotLabel={plot ? `${fmt(plot.width, 2)} × ${fmt(plot.height, 2)}` : ''}
               />
               <AnimatePresence>
                 {n < 3 && (
@@ -198,10 +219,41 @@ export default function ShapeCalculator() {
               </div>
             </Reveal>
 
+            <Reveal className="card plot-card" delay={0.08}>
+              <div className="card-title"><Tractor size={18} /> Largest usable rectangular plot</div>
+              {canSearch ? (
+                <>
+                  <div className="grid grid-2" style={{ gap: 12 }}>
+                    <Stat label="Plot area" value={plot ? plot.area : 0} unit={u2} decimals={2} highlight />
+                    <Stat label="% of field used" value={plot ? (plot.area / area) * 100 : 0} unit="%" decimals={1} />
+                    <Stat label="Length × Breadth">
+                      <span style={{ fontSize: 19 }}>{plot ? `${fmt(plot.width, 2)} × ${fmt(plot.height, 2)}` : '—'}</span> <small>{lu}</small>
+                    </Stat>
+                    <Stat label="Tilt">
+                      <span style={{ fontSize: 19 }}>{plot ? `${fmt(plot.angle, 1)}°` : '—'}</span>
+                    </Stat>
+                  </div>
+                  <div className="row" style={{ marginTop: 12, gap: 8 }}>
+                    <div className="seg" role="group" aria-label="Plot orientation">
+                      <button className={allowRotation ? 'active' : ''} onClick={() => setAllowRotation(true)}>Any angle</button>
+                      <button className={!allowRotation ? 'active' : ''} onClick={() => setAllowRotation(false)}>Along grid</button>
+                    </div>
+                    <button className="btn btn-sm" onClick={() => setShowPlot((v) => !v)}>{showPlot ? 'Hide' : 'Show'} on map</button>
+                    {searching && <span className="hint row" style={{ gap: 6 }}><Loader2 size={14} className="spin" /> searching…</span>}
+                  </div>
+                  <p className="hint" style={{ marginTop: 10 }}>
+                    There is no formula for a random shape, so the computer does what <Tex>{"A'(L)=0"}</Tex> does for a rectangle: it tries
+                    thousands of rectangles (every angle, every position), keeps only those fully inside the boundary, and picks the largest.
+                    This is <b>numerical optimisation</b>. The answer is a very close estimate from below.
+                  </p>
+                </>
+              ) : <p className="hint">Draw a simple field with at least 3 corners (edges must not cross).</p>}
+            </Reveal>
+
             <Reveal className="card" delay={0.1}>
-              <div className="card-title"><Circle size={18} /> How big <em>could</em> it be?</div>
+              <div className="card-title"><Circle size={18} /> Same boundary, better shape?</div>
               <p className="card-sub" style={{ marginBottom: 12 }}>
-                A separate question: keeping the same perimeter ({fmt(per, 2)} {unit === 'units' ? 'units' : unit}), which shapes would enclose more?
+                If the same length of fencing were re-shaped: keeping the same perimeter ({fmt(per, 2)} {unit === 'units' ? 'units' : unit}), which shapes would enclose more?
               </p>
               {n >= 3 && !crossing ? (
                 <div className="bench">

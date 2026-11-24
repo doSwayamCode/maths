@@ -89,9 +89,10 @@ export default function Hero() {
           </motion.h1>
           <motion.p variants={item} className="hero-sub">Exploring Maxima and Minima Through Mathematics</motion.p>
           <motion.p variants={item} className="hero-intro">
-            How large can a region be? This model answers two different questions: the <b>exact area of any
-            irregular plot</b> using the Shoelace Formula, and the <b>maximum area of a rectangle with a fixed
-            perimeter</b> using derivatives — where the answer is always a square.
+            We usually picture fields as rectangles or squares — easy to measure with <b>L × B</b>, and easy to
+            optimise. But real fields have <b>random shapes</b> that a measuring tape and a formula cannot handle.
+            This model shows how mathematics finds the <b>exact area</b> of any field and the <b>largest usable
+            plot</b> inside it.
           </motion.p>
           <motion.div variants={item} className="hero-eq">
             <Tex>{'A(L) = L\\left(\\tfrac{P}{2} - L\\right)'}</Tex>
@@ -101,8 +102,8 @@ export default function Hero() {
             <Tex>{'A_{\\max} = \\dfrac{P^2}{16}'}</Tex>
           </motion.div>
           <motion.div variants={item} className="row" style={{ marginTop: 28 }}>
-            <a href="#shape" className="btn btn-primary btn-lg">Explore the Model <ArrowDown size={18} /></a>
-            <a href="#lab" className="btn btn-lg">Optimisation Lab</a>
+            <a href="#problem" className="btn btn-primary btn-lg">Explore the Model <ArrowDown size={18} /></a>
+            <a href="#shape" className="btn btn-lg">Draw a random field</a>
           </motion.div>
           <motion.div variants={item} className="hero-meta">
             <span><Award size={15} /> 2nd Position · Zonal Level</span>

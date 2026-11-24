@@ -43,7 +43,7 @@ export default function About() {
           </Reveal>
           <Reveal className="card hoverable" delay={0.05}>
             <div className="card-title"><GraduationCap size={18} /> What the model shows</div>
-            <p className="muted">Mode 1 measures any irregular region exactly (Shoelace Formula). Mode 2 proves with derivatives that, for a fixed perimeter, a square gives the maximum area P²/16.</p>
+            <p className="muted">Real fields are rarely rectangles. Mode 1 finds the exact area of a random-shaped field (Shoelace Formula) and the largest rectangular plot inside it (optimisation). Mode 2 proves with derivatives that, for a fixed fence length, a square gives the maximum area P²/16.</p>
           </Reveal>
           <Reveal className="card hoverable" delay={0.1}>
             <div className="card-title"><Users size={18} /> Team</div>

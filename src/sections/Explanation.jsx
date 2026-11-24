@@ -63,6 +63,18 @@ const TOPICS = [
       <p><b>Is there a minimum?</b> As <Tex>{'L\\to0'}</Tex> or <Tex>{'L\\to P/2'}</Tex>, the rectangle becomes a thin strip and <Tex>{'A\\to0'}</Tex>. These end points are not real rectangles, so the area has no minimum value inside the interval — it can be made as small as we like.</p>
     </>,
   },
+  {
+    id: 'rf', title: 'Plot inside a curved field',
+    body: <>
+      <p>Derivatives can also find the biggest rectangular plot inside a field — when the boundary has an equation. Take a <b>circular field</b> of radius <Tex>r</Tex>. A rectangle inside it has corners <Tex>{'(\\pm x, \\pm y)'}</Tex> on the circle, so <Tex>{'x^2+y^2=r^2'}</Tex>:</p>
+      <Tex block>{'A = (2x)(2y) = 4x\\sqrt{r^2-x^2}'}</Tex>
+      <p>It is easier to maximise <Tex>{'S = A^2'}</Tex> (both are largest together):</p>
+      <Tex block>{"S(x)=16(r^2x^2-x^4),\\qquad S'(x)=16(2r^2x-4x^3)=0 \\;\\Rightarrow\\; x=\\frac{r}{\\sqrt2}"}</Tex>
+      <Tex block>{"S''\\!\\left(\\tfrac{r}{\\sqrt2}\\right)=16\\left(2r^2-12\\cdot\\tfrac{r^2}{2}\\right)=-64r^2<0 \\;\\Rightarrow\\; \\text{maximum}"}</Tex>
+      <Tex block>{'y=\\frac{r}{\\sqrt2}=x \\;(\\text{a square}),\\qquad A_{\\max}=2r^2 \\approx 63.7\\% \\text{ of the field } (\\pi r^2)'}</Tex>
+      <p><b>A random field has no equation for its boundary</b>, so we cannot differentiate. Instead the computer does the same job numerically: it tests thousands of rectangles and keeps the largest one that fits. Try it in Mode 1 — draw a near-circle and the search also finds a square of about <Tex>{'2r^2'}</Tex>.</p>
+    </>,
+  },
 ];
 
 export default function Explanation() {

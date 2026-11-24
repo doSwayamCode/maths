@@ -4,7 +4,7 @@ import { Menu, X, Sigma } from 'lucide-react';
 
 export const NAV_ITEMS = [
   { id: 'problem', label: 'Problem' },
-  { id: 'shape', label: 'Shape Calculator' },
+  { id: 'shape', label: 'Random Field' },
   { id: 'lab', label: 'Optimisation Lab' },
   { id: 'calculator', label: 'Calculator' },
   { id: 'theory', label: 'Theory' },

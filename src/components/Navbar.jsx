@@ -46,7 +46,7 @@ export default function Navbar() {
       <div className="container nav-inner">
         <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="Back to top">
           <span className="brand-mark"><Sigma size={18} /></span>
-          <span>AREA <b className="grad-text">OPTIMISER</b></span>
+          <span>MAXIMUM AREA <b className="grad-text">OPTIMISER</b></span>
         </button>
         <nav className="nav-links" aria-label="Sections">
           {NAV_ITEMS.map((it) => (

@@ -1,9 +1,9 @@
 {
-  "name": "area-optimiser",
+  "name": "maximum-area-optimiser",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "AREA OPTIMISER \u2014 Exploring Maximum Area Through Mathematics (Class 12 Maths exhibition website)",
+  "description": "MAXIMUM AREA OPTIMISER — Exploring Maxima and Minima Through Mathematics (Class 12 Maths exhibition website)",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

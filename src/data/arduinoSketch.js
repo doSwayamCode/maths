@@ -1,5 +1,5 @@
 // Example Arduino Nano sketch shown on the Technology page.
-export const ARDUINO_SKETCH = `// AREA OPTIMISER — Arduino Nano (example sketch)
+export const ARDUINO_SKETCH = `// MAXIMUM AREA OPTIMISER — Arduino Nano (example sketch)
 // A potentiometer sets the length L of a rectangle with fixed perimeter P.
 // The Nano computes B, A and A'(L) and gives LED + buzzer feedback.
 // Adjust the pin numbers to match your own circuit.

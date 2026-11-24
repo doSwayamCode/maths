@@ -3,7 +3,7 @@
  * Add your names / school here — empty fields are simply not displayed.
  */
 export const PROJECT = {
-  title: 'AREA OPTIMISER — Exploring Maximum Area Through Mathematics',
+  title: 'MAXIMUM AREA OPTIMISER — Exploring Maxima and Minima Through Mathematics',
   chapter: 'Applications of Derivatives — Maxima and Minima',
   className: 'Class 12 · CBSE Mathematics',
   school: '',

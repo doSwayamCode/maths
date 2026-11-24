@@ -85,7 +85,7 @@ export default function Hero() {
             <span className="eyebrow" style={{ margin: 0 }}><Sigma size={14} /> Class 12 · Applications of Derivatives</span>
           </motion.div>
           <motion.h1 variants={item} className="hero-title">
-            AREA<br /><span className="grad-text">OPTIMISER</span>
+            MAXIMUM<br />AREA<br /><span className="grad-text">OPTIMISER</span>
           </motion.h1>
           <motion.p variants={item} className="hero-sub">Exploring Maxima and Minima Through Mathematics</motion.p>
           <motion.p variants={item} className="hero-intro">

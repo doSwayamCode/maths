@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="row" style={{ gap: 10 }}>
           <span className="brand-mark"><Sigma size={16} /></span>
           <div>
-            <div style={{ color: 'var(--text)', fontWeight: 600 }}>AREA OPTIMISER</div>
+            <div style={{ color: 'var(--text)', fontWeight: 600 }}>MAXIMUM AREA OPTIMISER</div>
             <div>Class 12 Mathematics Exhibition · Applications of Derivatives</div>
           </div>
         </div>

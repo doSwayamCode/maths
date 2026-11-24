@@ -41,7 +41,7 @@ export default function Loader({ onDone }) {
             transition={{ duration: 1.5, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
           />
         </svg>
-        <div className="loader-title">AREA OPTIMISER</div>
+        <div className="loader-title">MAXIMUM AREA OPTIMISER</div>
         <div className="loader-eq mono">A<sub>max</sub> = P² / 16</div>
         <div className="loader-bar"><div style={{ width: `${pct}%` }} /></div>
         <div className="loader-pct mono">{pct.toString().padStart(3, '0')}% · initialising derivatives</div>

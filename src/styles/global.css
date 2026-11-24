@@ -253,3 +253,16 @@ kbd { font-family: var(--font-mono); font-size: 12px; font-weight: 700; padding:
 .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .spacer { flex: 1; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.footer-name { color: var(--white); font-weight: 700; font-family: var(--font-display); }
+.footer-credit { margin-top: 24px; padding-top: 20px; border-top: 2px dashed #4a4740; display: flex; justify-content: center; }
+.made-by {
+  display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px;
+  background: var(--yellow); color: var(--ink); border: var(--border); border-color: var(--white);
+  border-radius: var(--radius-sm); box-shadow: 4px 4px 0 var(--white); font-size: 15px; font-weight: 600;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.made-by b { font-weight: 800; }
+.made-by:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--white); }
+.made-by:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--white); }
+.made-by:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+.in-badge { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 5px; background: #0a66c2; color: #fff; font-weight: 800; font-size: 13px; font-family: var(--font-sans); letter-spacing: -0.02em; }
